@@ -1,0 +1,806 @@
+<?php
+// require'path/to/dbconnection.php';
+// Define configuration variables
+$recipientEmail = "chikotech@gmail.com";  // The email address where form submissions will be sent
+$websiteName = "ChikoTech";               // Your website name for the email subject
+
+// Initialize response array
+$response = array(
+    'status' => 'error',
+    'message' => 'An unknown error occurred'
+);
+
+// Check if the form was submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Get form data and sanitize
+    $name = filter_var($_POST['name'] ?? '', FILTER_SANITIZE_STRING);
+    $email = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
+    $subject = filter_var($_POST['subject'] ?? 'Website Contact Form', FILTER_SANITIZE_STRING);
+    $message = filter_var($_POST['message'] ?? '', FILTER_SANITIZE_STRING);
+    
+    // Validate data
+    if (empty($name) || empty($email) || empty($message)) {
+        $response['message'] = 'Please fill in all required fields';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $response['message'] = 'Please enter a valid email address';
+    } else {
+        // Prepare email
+        $emailSubject = "$websiteName: $subject";
+        $emailBody = "You have received a new message from your website contact form.\n\n";
+        $emailBody .= "Name: $name\n";
+        $emailBody .= "Email: $email\n";
+        $emailBody .= "Subject: $subject\n\n";
+        $emailBody .= "Message:\n$message\n";
+        
+        // Headers
+        $headers = "From: $name <$email>\r\n";
+        $headers .= "Reply-To: $email\r\n";
+        $headers .= "X-Mailer: PHP/" . phpversion();
+        
+        // Send email
+        if (mail($recipientEmail, $emailSubject, $emailBody, $headers)) {
+            $response = array(
+                'status' => 'success',
+                'message' => 'Your message has been sent. Thank you!'
+            );
+        } else {
+            $response['message'] = 'Sorry, there was an error sending your message. Please try again later.';
+        }
+    }
+    
+    // Return JSON response
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit;
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChikoTech</title>
+    <link rel="stylesheet" href="assets/css/main1.css">
+    <link rel="stylesheet" href="assets/css/chatbot.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <script src="contactform.js"></script>
+   
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo-container">
+                <img src="assets/logo.png" alt="ChikoTech Logo" class="logo-img">
+                    <div class="company-name">ChikoTech</div>
+                </div>
+                <nav>
+                    <ul id="nav-menu">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#projects">Projects</a></li>
+                        <li><a href="#team">Team</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <button class="theme-toggle" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="mobile-menu-btn" id="mobile-menu-btn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    </ul>
+                    
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-particles" id="particles"></div>
+        <div class="container">
+            <div class="hero-inner">
+                <h1 class="hero-title">Advanced IT Solutions</h1>
+                <h2 class="hero-subtitle">for Modern Businesses</h2>
+                <p class="hero-text">ChikoTech delivers cutting-edge technology services to help your business thrive in the digital age. From web development to system integration, we've got your tech needs covered.</p>
+                
+                <div class="stats-container">
+                    <div class="stat">
+                        <span class="stat-number">20+</span>
+                        <span class="stat-label">Projects Completed</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">95%</span>
+                        <span class="stat-label">Client Satisfaction</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">4+</span>
+                        <span class="stat-label">Years Experience</span>
+                    </div>
+                </div>
+                
+                <div class="hero-visual">
+                    <div class="hero-visual-3d">
+                        <div class="cube">
+                            <div class="cube-face face-front"><i class="fas fa-code"></i></div>
+                            <div class="cube-face face-back"><i class="fas fa-server"></i></div>
+                            <div class="cube-face face-right"><i class="fas fa-mobile-alt"></i></div>
+                            <div class="cube-face face-left"><i class="fas fa-database"></i></div>
+                            <div class="cube-face face-top"><i class="fas fa-network-wired"></i></div>
+                            <div class="cube-face face-bottom"><i class="fas fa-shield-alt"></i></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="#contact" class="cta-btn">Get Started</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <h2 class="section-title">Our Services</h2>
+            <div class="services-grid">
+                <!-- Web Development -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Web Development</h3>
+                        <p class="service-description">Custom web solutions designed to represent your brand and meet your business goals with cutting-edge technologies.</p>
+                        <ul class="service-features">
+                            <li>Responsive Design</li>
+                            <li>E-commerce Solutions</li>
+                            <li>CMS Integration</li>
+                            <li>SEO Optimization</li>
+                        </ul>
+                        <a href="#contact" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- App Development -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">App Development</h3>
+                        <p class="service-description">Native and cross-platform mobile applications that deliver exceptional user experiences across all devices.</p>
+                        <ul class="service-features">
+                            <li>iOS & Android Apps</li>
+                            <li>Cross-platform Solutions</li>
+                            <li>UI/UX Design</li>
+                            <li>App Maintenance</li>
+                        </ul>
+                        <a href="#contact" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- System Development -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">System Development</h3>
+                        <p class="service-description">Custom software solutions tailored to optimize your business operations and improve efficiency.</p>
+                        <ul class="service-features">
+                            <li>ERP Systems</li>
+                            <li>CRM Solutions</li>
+                            <li>Business Intelligence</li>
+                            <li>Process Automation</li>
+                        </ul>
+                        <a href="#contact" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Network Solutions -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Network Solutions</h3>
+                        <p class="service-description">Secure and reliable networking infrastructure design, implementation, and maintenance services.</p>
+                        <ul class="service-features">
+                            <li>Network Design</li>
+                            <li>Network Security</li>
+                            <li>Cloud Integration</li>
+                            <li>24/7 Support</li>
+                        </ul>
+                        <a href="#contact" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Cloud Services -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Cloud Services</h3>
+                        <p class="service-description">Scalable cloud solutions that help businesses reduce costs, improve flexibility, and enhance security.</p>
+                        <ul class="service-features">
+                            <li>Cloud Migration</li>
+                            <li>AWS & Azure Solutions</li>
+                            <li>Cloud Security</li>
+                            <li>Serverless Architecture</li>
+                        </ul>
+                        <a href="#contact" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Cybersecurity -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3 class="service-title">Cybersecurity</h3>
+                        <p class="service-description">Comprehensive security solutions to protect your business data, systems, and users from cyber threats.</p>
+                        <ul class="service-features">
+                            <li>Security Audits</li>
+                            <li>Penetration Testing</li>
+                            <li>Threat Detection</li>
+                            <li>Compliance Solutions</li>
+                        </ul>
+                        <a href="#contact" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-inner">
+                <div class="about-content">
+                    <h2>We're Passionate About Technology</h2>
+                    <p class="about-text">At ChikoTech, we combine technical expertise with innovative thinking to deliver IT solutions that transform businesses. With over 12 years of experience, our team of experts is dedicated to helping clients navigate the complex world of technology.</p>
+                    <p class="about-text">Our mission is to provide exceptional IT services that enable businesses to thrive in the digital era. We believe in building long-term partnerships with our clients, understanding their unique challenges, and delivering solutions that drive growth and success.</p>
+                    
+                    <div class="about-stats">
+                        <div class="about-stat">
+                            <div class="about-stat-number">1M+</div>
+                            <div class="about-stat-label">Code Lines</div>
+                        </div>
+                        <div class="about-stat">
+                            <div class="about-stat-number">50+</div>
+                            <div class="about-stat-label">Clients</div>
+                        </div>
+                        <div class="about-stat">
+                            <div class="about-stat-number">4+</div>
+                            <div class="about-stat-label">Countries</div>
+                        </div>
+                        <div class="about-stat">
+                            <div class="about-stat-number">20.7%</div>
+                            <div class="about-stat-label">ROI Increase</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <img src="/api/placeholder/600/400" alt="ChikoTech Team" class="about-image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects" id="projects">
+        <div class="container">
+            <h2 class="section-title">Our Latest Projects</h2>
+            <div class="projects-grid">
+                <!-- Project 1 -->
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="assets/web.jpg" alt="Project 1">
+                    </div>
+                    <div class="project-content">
+                        <span class="project-category">Web Development</span>
+                        <h3 class="project-title">E-Commerce Platform</h3>
+                        <p class="project-description">A comprehensive e-commerce solution with advanced product management, secure payment processing, and real-time analytics.</p>
+                        <a href="#" class="project-link">View Case Study <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Project 2 -->
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="assets/tms.jpg" alt="Project 2">
+                    </div>
+                    <div class="project-content">
+                        <span class="project-category">Mobile App</span>
+                        <h3 class="project-title">Tender Management System</h3>
+                        <p class="project-description">A centralized platform that streamlines tender processes, enhances transparency, and improves bid management efficiency.</p>
+                        <a href="#" class="project-link">View Case Study <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Project 3 -->
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="assets/sis.jpg" alt="Project 3">
+                    </div>
+                    <div class="project-content">
+                        <span class="project-category">System Development</span>
+                        <h3 class="project-title">Smart Irrigation System</h3>
+                        <p class="project-description">An intelligent irrigation solution that conserves water, reduces costs, and delivers real-time control for efficient crop management..</p>
+                        <a href="#" class="project-link">View Case Study <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">Client Testimonials</h2>
+            <div class="testimonials-container">
+                <div class="testimonials-carousel" id="testimonials-carousel">
+                    <!-- Testimonial 1 -->
+                    <div class="testimonial-item active">
+                        <div class="testimonial-content">
+                            <p class="testimonial-text">ChikoTech completely transformed our business operations with their custom ERP solution. Their team was professional, responsive, and truly understood our needs. The system has improved our efficiency by 40%.</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-image">
+                                <img src="/api/placeholder/80/80" alt="Client">
+                            </div>
+                            <div class="author-info">
+                                <h4 class="author-name">Sarah Johnson</h4>
+                                <span class="author-position">CEO, GlobalTech Inc.</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 2 -->
+                    <div class="testimonial-item">
+                        <div class="testimonial-content">
+                            <p class="testimonial-text">The mobile app developed by ChikoTech exceeded our expectations. Their attention to detail and focus on user experience resulted in an app that our customers love. Downloads increased by 200% within the first month.</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-image">
+                                <img src="/api/placeholder/80/80" alt="Client">
+                            </div>
+                            <div class="author-info">
+                                <h4 class="author-name">David Wilson</h4>
+                                <span class="author-position">Marketing Director, AppMaster</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 3 -->
+                    <div class="testimonial-item">
+                        <div class="testimonial-content">
+                            <p class="testimonial-text">ChikoTech's cybersecurity services have given us peace of mind. Their team identified vulnerabilities we weren't aware of and implemented robust security measures that protect our sensitive data and systems.</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-image">
+                                <img src="/api/placeholder/80/80" alt="Client">
+                            </div>
+                            <div class="author-info">
+                                <h4 class="author-name">Michael Brown</h4>
+                                <span class="author-position">CTO, SecureFinance Ltd.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-controls">
+                    <button class="testimonial-btn" id="prev-testimonial">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="testimonial-btn" id="next-testimonial">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                
+                <div class="testimonial-indicators" id="testimonial-indicators">
+                    <span class="testimonial-indicator active" data-index="0"></span>
+                    <span class="testimonial-indicator" data-index="1"></span>
+                    <span class="testimonial-indicator" data-index="2"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team" id="team">
+        <div class="container">
+            <h2 class="section-title">Meet Our Experts</h2>
+            <div class="team-grid">
+                <!-- Team Member 1 -->
+                <div class="team-member">
+                    <div class="member-image">
+                        <img src="/api/placeholder/300/300" alt="Team Member">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Chishala Backstone</h3>
+                        <span class="member-position">Chief Technical Officer</span>
+                        <p class="member-bio">With over 3 years of experience in software development, Backstone leads our technical team with expertise in AI and cloud computing.</p>
+                        <div class="member-social">
+                            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Member 2 -->
+                <div class="team-member">
+                    <div class="member-image">
+                        <img src="assets/StevenSautu.jpg" alt="Team Member">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Steven Sautu</h3>
+                        <span class="member-position">UI/UX Design Lead</span>
+                        <p class="member-bio">Steven specializes in creating intuitive user experiences that combine aesthetics with functionality for digital products.</p>
+                        <div class="member-social">
+                            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-dribbble"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-behance"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Member 3 -->
+                <div class="team-member">
+                    <div class="member-image">
+                        <img src="assets/Samuel.jpg" alt="Team Member">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Samuel Sianamate</h3>
+                        <span class="member-position">Network Security Expert</span>
+                        <p class="member-bio">Samuel ensures our clients' networks are protected with the latest security protocols and best practices in cybersecurity.</p>
+                        <div class="member-social">
+                            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-link"><i class="fas fa-globe"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Member 4 -->
+                <div class="team-member">
+                    <div class="member-image">
+                        <img src="assets/justus.jpg" alt="Team Member">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Justus Micheelo</h3>
+                        <span class="member-position">Full Stack Developer</span>
+                        <p class="member-bio">Justus brings creative solutions to complex problems with her expertise in various programming languages and frameworks.</p>
+                        <div class="member-social">
+                            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-stack-overflow"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-inner">
+                <div class="contact-info">
+                    <h2>Let's Start a Conversation</h2>
+                    <p class="contact-text">Ready to discuss your project? Our team is here to help you navigate the complex world of technology and find the right solutions for your business needs.</p>
+                    <ul class="contact-details">
+                        <li>
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <span class="contact-label">Our Location</span>
+                                <span class="contact-value">Chalimbana Univerity(chongwe), Lusaka</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="contact-icon">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div>
+                                <span class="contact-label">Call Us</span>
+                                <a href="tel:+1234567890" class="contact-value">+260 9705 53244</a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <span class="contact-label">Email Us</span>
+                                <a href="mailto:info@chikotech.com" class="contact-value">chikotech@gmail.com</a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="contact-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div>
+                                <span class="contact-label">Working Hours</span>
+                                <span class="contact-value">Mon - Fri: 9AM - 6PM</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="contact-form">
+                <form id="contact-form" action="contact-handler.php" method="post">
+                        <div class="form-group">
+                            <label for="name" class="form-label">Your Name</label>
+                            <input type="text" id="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="form-label">Your Email</label>
+                            <input type="email" id="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject" class="form-label">Subject</label>
+                            <input type="text" id="subject" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="message" class="form-label">Your Message</label>
+                            <textarea id="message" class="form-control" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="form-submit">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Chat Bot -->
+    <div class="chat-bot" id="chat-bot">
+        <div class="chat-bot-toggle" id="chat-bot-toggle">
+            <i class="fas fa-comments"></i>
+        </div>
+        <div class="chat-bot-container" id="chat-bot-container">
+            <div class="chat-bot-header">
+                <h3>ChikoTech Support</h3>
+                <button class="chat-bot-close" id="chat-bot-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chat-bot-messages" id="chat-bot-messages">
+                <div class="chat-message bot">
+                    <div class="chat-message-content">
+                        Hello! Welcome to ChikoTech. How can I assist you today?
+                    </div>
+                    <div class="chat-message-time">Now</div>
+                </div>
+            </div>
+            <div class="chat-bot-input">
+                <input type="text" id="chat-input" placeholder="Type your message...">
+                <button id="chat-send">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            document.getElementById('nav-menu').classList.toggle('active');
+            this.classList.toggle('active');
+        });
+        
+        // Dark/Light Theme Toggle
+        document.getElementById('theme-toggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-theme');
+            const icon = this.querySelector('i');
+            if (icon.classList.contains('fa-moon')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+        
+        // Testimonials Carousel
+        const testimonials = document.querySelectorAll('.testimonial-item');
+        const indicators = document.querySelectorAll('.testimonial-indicator');
+        let currentTestimonial = 0;
+        
+        function showTestimonial(index) {
+            testimonials.forEach(item => item.classList.remove('active'));
+            indicators.forEach(indicator => indicator.classList.remove('active'));
+            
+            testimonials[index].classList.add('active');
+            indicators[index].classList.add('active');
+            currentTestimonial = index;
+        }
+        
+        document.getElementById('next-testimonial').addEventListener('click', function() {
+            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+            showTestimonial(currentTestimonial);
+        });
+        
+        document.getElementById('prev-testimonial').addEventListener('click', function() {
+            currentTestimonial = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
+            showTestimonial(currentTestimonial);
+        });
+        
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', function() {
+                showTestimonial(index);
+            });
+        });
+        
+        // Particles.js for Hero Section
+        if (typeof particlesJS !== 'undefined') {
+            particlesJS('particles', {
+                particles: {
+                    number: { value: 80, density: { enable: true, value_area: 800 } },
+                    color: { value: '#4a90e2' },
+                    shape: { type: 'circle' },
+                    opacity: { value: 0.5, random: false },
+                    size: { value: 3, random: true },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: '#4a90e2',
+                        opacity: 0.4,
+                        width: 1
+                    },
+                    move: {
+                        enable: true,
+                        speed: 2,
+                        direction: 'none',
+                        random: false,
+                        straight: false,
+                        out_mode: 'out',
+                        bounce: false
+                    }
+                },
+                interactivity: {
+                    detect_on: 'canvas',
+                    events: {
+                        onhover: { enable: true, mode: 'grab' },
+                        onclick: { enable: true, mode: 'push' },
+                        resize: true
+                    },
+                    modes: {
+                        grab: { distance: 140, line_linked: { opacity: 1 } },
+                        push: { particles_nb: 4 }
+                    }
+                },
+                retina_detect: true
+            });
+        }
+        
+        // Form Submission
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            // Here you would typically send the form data to your server
+            console.log('Form submitted:', { name, email, subject, message });
+            
+            // Show success message (in a real implementation)
+            alert('Thank you for your message! We will get back to you soon.');
+            this.reset();
+        });
+        
+        // Chat Bot Functionality
+        const chatBotToggle = document.getElementById('chat-bot-toggle');
+        const chatBotClose = document.getElementById('chat-bot-close');
+        const chatBotContainer = document.getElementById('chat-bot-container');
+        const chatMessages = document.getElementById('chat-bot-messages');
+        const chatInput = document.getElementById('chat-input');
+        const chatSend = document.getElementById('chat-send');
+        
+        // Toggle chat bot visibility
+        chatBotToggle.addEventListener('click', function() {
+            chatBotContainer.classList.toggle('active');
+        });
+        
+        chatBotClose.addEventListener('click', function() {
+            chatBotContainer.classList.remove('active');
+        });
+        
+        // Send message function
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (message !== '') {
+                // Add user message
+                addMessage(message, 'user');
+                chatInput.value = '';
+                
+                // Simulate bot response after a short delay
+                setTimeout(() => {
+                    const botResponses = [
+                        "Thank you for your message. How can I help you with our IT services?",
+                        "I'd be happy to connect you with one of our specialists. Could you please specify which service you're interested in?",
+                        "Great question! Our team specializes in that area. Would you like to schedule a consultation?",
+                        "I understand your concern. Let me gather some information to better assist you.",
+                        "That's a common challenge for many businesses. Our solutions can help address that specifically."
+                    ];
+                    const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
+                    addMessage(randomResponse, 'bot');
+                }, 1000);
+            }
+        }
+        
+        // Add message to chat
+        function addMessage(content, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('chat-message', sender);
+            
+            const now = new Date();
+            const time = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+            
+            messageDiv.innerHTML = `
+                <div class="chat-message-content">${content}</div>
+                <div class="chat-message-time">${time}</div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Event listeners for sending messages
+        chatSend.addEventListener('click', sendMessage);
+        
+        chatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
+
+  <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="footer-inner">
+            <!-- Company Info -->
+            <div class="footer-column">
+                <h3>ChikoTech</h3>
+                <p>
+                    Advanced IT solutions for modern businesses. We help organizations leverage technology to achieve their goals and stay ahead of the competition.
+                </p>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#home"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="#services"><i class="fas fa-chevron-right"></i> Services</a></li>
+                    <li><a href="#about"><i class="fas fa-chevron-right"></i> About</a></li>
+                    <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Info (Optional) -->
+            <div class="footer-column">
+                <h3>Contact</h3>
+                <p>Email: info@chikotech.com</p>
+                <p>Phone: +260 97 000 0000</p>
+                <p>Location: Lusaka, Zambia</p>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="footer-bottom">
+            <p>&copy; 2025 ChikoTech. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
