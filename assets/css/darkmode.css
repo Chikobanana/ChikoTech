@@ -1,0 +1,392 @@
+/* Dark Mode Styles */
+:root {
+    /* Light theme variables */
+    --primary-color:  #ffffff;
+    --secondary-color: #34495e;
+    --background-color: #ffffff;
+    --text-color: #333333;
+    --card-bg: #f9f9f9;
+    --border-color: #e0e0e0;
+    --header-bg: #ffffff;
+    --footer-bg: #34495e;
+    --footer-text: #ffffff;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --hero-overlay: rgba(0, 0, 0, 0.5);
+    --hero-text-color: #007bff; /* Blue in light mode */
+    --general-text-color: #080808; /* Blue */
+    --input-bg: #ffffff;
+    --input-text: #333333;
+    --stat-bg: rgba(255, 255, 255, 0.9);
+    --testimonial-indicator: #ccc;
+    --testimonial-indicator-active: #4a90e2;
+    --cube-color: #4a90e2;
+    --form-submit-bg: #4a90e2;
+    --form-submit-color: #ffffff;
+    --chat-toggle-bg: #4a90e2;
+    --chat-toggle-color: #ffffff;
+}
+
+.dark-mode {
+    /* Dark theme variables */
+    --primary-color: #1a1a1a; /* Slightly lighter for better contrast */
+    --secondary-color: #2c3e50;
+    --background-color: #121212;
+    --text-color: #f0f0f0;
+    --card-bg: #1e1e1e;
+    --border-color: #333333;
+    --header-bg: #161616;
+    --footer-bg: #1a1a1a;
+    --footer-text: #f0f0f0;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --hero-overlay: rgba(0, 0, 0, 0.7);
+    --hero-text-color: #ffffff; /* White in dark mode */
+    --general-text-color: #ffffff; /* White */
+    --input-bg: #2a2a2a;
+    --input-text: #f0f0f0;
+    --stat-bg: rgba(30, 30, 30, 0.9);
+    --testimonial-indicator: #444;
+    --testimonial-indicator-active: #5a9ff2;
+    --cube-color: #5a9ff2;
+    --form-submit-bg: #5a9ff2;
+    --form-submit-color: #ffffff;
+    --chat-toggle-bg: #2c3e50;
+    --chat-toggle-color: #ffffff;
+    --header-bg: rgba(0, 0, 0, 0.3); /* semi-transparent black */
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    --border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Base styles that will change with dark mode */
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Header Styles */
+header {
+    background-color: var(--header-bg);
+    box-shadow: var(--shadow);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.logo-container .company-name {
+    color: var(--text-color);
+    transition: color 0.3s ease;
+}
+
+nav ul li a {
+    color: var(--text-color);
+    transition: color 0.3s ease;
+}
+
+.mobile-menu-btn {
+    color: var(--text-color);
+}
+
+/* Hero Section Styles */
+.hero::before {
+    background-color: var(--hero-overlay);
+}
+
+.hero-title, .hero-subtitle {
+    color: var(--hero-text-color); /* Dynamically adapts based on theme */
+    transition: color 0.3s ease;
+}
+
+.hero-text {
+    color: var(--general-text-color); /* Dynamically adapts based on theme */
+}
+
+.cube-face {
+    background-color: var(--cube-color);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.stat {
+    background-color: var(--stat-bg);
+    color: var(--text-color);
+}
+
+.stat-number {
+    color: var( --general-text-color);
+}
+
+/* Section Styles */
+.section-title {
+    color: var(--text-color);
+    position: relative;
+}
+
+.section-title::after {
+    background-color: var(--primary-color);
+}
+
+/* Services Section */
+.service-card, 
+.project-card, 
+.team-member, 
+.testimonial-item,
+.contact-form form {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-icon {
+    color: var(--primary-color);
+    background-color: rgba(74, 144, 226, 0.1);
+    border: 1px solid rgba(74, 144, 226, 0.2);
+}
+
+.dark-mode .service-icon {
+    background-color: rgba(90, 159, 242, 0.15);
+    border: 1px solid rgba(90, 159, 242, 0.3);
+}
+
+.service-title, 
+.project-title, 
+.member-name,
+.contact-form .form-label {
+    color: var(--text-color);
+}
+
+.service-description, 
+.project-description, 
+.member-bio,
+.testimonial-text,
+.about-text {
+    color: var(--text-color);
+    opacity: 0.9;
+}
+
+.service-features li {
+    color: var(--text-color);
+}
+
+.service-link, .project-link {
+    color: var(--primary-color);
+}
+
+/* Projects Section */
+.project-category {
+    color: var(--primary-color);
+    background-color: rgba(74, 144, 226, 0.1);
+}
+
+.dark-mode .project-category {
+    background-color: rgba(90, 159, 242, 0.15);
+}
+
+/* Testimonials Section */
+.testimonial-btn {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.testimonial-indicator {
+    background-color: var(--testimonial-indicator);
+}
+
+.testimonial-indicator.active {
+    background-color: var(--testimonial-indicator-active);
+}
+
+.author-name {
+    color: var(--text-color);
+}
+
+.author-position {
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+/* Team Section */
+.member-social .social-link {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.member-social .social-link:hover {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    border-color: var(--primary-color);
+}
+
+.member-position {
+    color: var(--primary-color);
+}
+
+/* Contact Section */
+.contact-form .form-control {
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: var(--input-text);
+}
+
+.contact-form .form-control::placeholder {
+    color: var(--text-color);
+    opacity: 0.5;
+}
+
+.form-submit {
+    background-color: var(--form-submit-bg);
+    color: var(--form-submit-color);
+    border: none;
+}
+
+.contact-icon {
+    background-color: rgba(74, 144, 226, 0.1);
+    color: var(--primary-color);
+}
+
+.dark-mode .contact-icon {
+    background-color: rgba(90, 159, 242, 0.15);
+}
+
+.contact-label {
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+.contact-value, .contact-value a {
+    color: var(--text-color);
+}
+
+/* Footer Styles */
+footer {
+    background-color: var(--footer-bg);
+    color: var(--footer-text);
+}
+
+.footer-column h3 {
+    color: var(--footer-text);
+}
+
+.footer-links a {
+    color: var(--footer-text);
+    opacity: 0.8;
+}
+
+.footer-links a:hover {
+    color: var(--primary-color);
+    opacity: 1;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--text-color);
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background-color: rgba(128, 128, 128, 0.2);
+}
+
+/* Chat Bot Styles */
+.chat-bot-toggle {
+    background-color: var(--chat-toggle-bg);
+    color: var(--chat-toggle-color);
+}
+
+.chat-bot-container {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+}
+
+.chat-bot-header {
+    background-color: var(--primary-color);
+    color: #ffffff;
+}
+
+.chat-bot-close {
+    color: #ffffff;
+}
+
+.chat-message.bot .chat-message-content {
+    background-color: var(--secondary-color);
+    color: #ffffff;
+}
+
+.chat-message.user .chat-message-content {
+    background-color: var(--primary-color);
+    color: #ffffff;
+}
+
+.chat-message-time {
+    color: var(--text-color);
+    opacity: 0.6;
+}
+
+.chat-bot-input input {
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    border: 1px solid var(--border-color);
+}
+
+.chat-bot-input input::placeholder {
+    color: var(--text-color);
+    opacity: 0.5;
+}
+
+.chat-bot-input button {
+    background-color: var(--primary-color);
+    color: #ffffff;
+}
+
+/* About Stats */
+.about-stat-number {
+    color: var(--primary-color);
+}
+
+.about-stat-label {
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+/* Particles */
+.dark-mode #particles-js canvas {
+    filter: brightness(0.8);
+}
+
+/* Mobile Menu */
+@media (max-width: 768px) {
+    #nav-menu {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow);
+    }
+    
+    #nav-menu.active {
+        border-color: var(--border-color);
+    }
+    
+    .mobile-menu-btn {
+        color: var(--text-color);
+    }
+}
+
+/* Form submission success state */
+.form-submit.success {
+    background-color: #4CAF50; /* Keep green for success in both themes */
+}
+
+/* Animation for visible elements */
+.service-card.visible,
+.team-member.visible,
+.project-card.visible,
+.about-visual.visible {
+    opacity: 1;
+    transform: translateY(0);
+}

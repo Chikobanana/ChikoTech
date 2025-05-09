@@ -6,7 +6,10 @@
             --accent-color: #ff3366;
             --background-color: #f5f5f7;
             --card-bg: #ffffff;
-            --shadow-color: rgba(0, 0, 0, 0.1);
+            --header-bg: rgba(255, 255, 255, 0.6); /* semi-transparent white */
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    --border-color: rgba(0, 0, 0, 0.1);
+            
         }
 
         [data-theme="dark"] {
@@ -33,23 +36,34 @@
             overflow-x: hidden;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 5rem;
-        }
+       /* Example in main1.css */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 0 15px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.hero-title {
+    font-size: 6vw; /* scales with screen width */
+}
+
 
         /* Header Styles */
-        header {
-            background: rgba(255, 255, 255, 0.1);  /* light transparent */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);  /* for Safari */
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* optional soft line */
-            box-shadow: 0 2px 10px var(--shadow-color);
-            position: fixed;
-            width: 100%;
-            z-index: 1000;
-        }
+       header {
+    background-color: var(--header-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--shadow);
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
 
         .header-inner {
             display: flex;
@@ -171,7 +185,7 @@
 
         .hero-subtitle {
             font-size: 2.5rem;
-            color: var(--secondary-color);
+            color: var(--primary-color);
             margin-bottom: 2rem;
             font-weight: 700;
         }
@@ -295,7 +309,27 @@
             50% { transform: translateY(-100px) translateX(100px); }
             100% { transform: translateY(0) translateX(0); }
         }
-
+        @media (max-width: 768px) {
+            .hero-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+        
+            nav ul {
+                display: none;
+                flex-direction: column;
+            }
+        
+            .mobile-menu-btn {
+                display: block;
+            }
+        
+            .service-card {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+        }
+        
         /* Services Section Styles */
         .services {
             padding: 6rem 0;
